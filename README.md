@@ -1,2 +1,5 @@
 # Nordenbox_MachineLearning_Study
- My First Github Study Area
+ My First Github Study Area.
+ 学完 Python 基础之后，我对爬虫并无兴趣，我的兴趣是机器学习和人工智能，所以我决定暂停爬虫，开始一点一点地学习机器学习。
+ 同时我是一个电影工作者，但是我至今也不敢说我真正搞懂了电影是怎么回事。我学习 python 的目的其实就是我内心的一种折射：搞明白事物背后的机理。
+ 我觉得也许有一天每一个人都必须不断的学习，这本身也是一种乐趣。
