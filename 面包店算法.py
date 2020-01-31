@@ -1,18 +1,17 @@
-# 每个线程的号码
 import threading
 import time
 
+
+# 每个线程的号码
 number = [0 for _ in range(5)]
-# print(number)
+
 # 是否需要号码
 entering = [False for _ in range(5)]
 
 
-# print(entering)
-
 # 获取到资源，这里输出并且沉睡1秒
 def achieve_resource(num):
-    print('Now is no.{} thread achieve the resource'.format(num))
+    print('Now is no.{} thread achieve the resource'.format(num))    # format 函数替代%，利用参数进行格式化字符串，%被替换为大括号。
     time.sleep(1)
 
 
