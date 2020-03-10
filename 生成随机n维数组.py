@@ -17,7 +17,8 @@ class MakeRandomList:
     def creating(self, Dimentions_rows, Dimentions_columns, random_scale):
         Origin_List = []
         for i in range(1, Dimentions_rows + 1):
-            Origin_List.append([random.randint(0, random_scale) for i in range(1, Dimentions_columns + 1)])
+            Origin_List.append([random.randint(0, random_scale)
+                                for i in range(1, Dimentions_columns + 1)])
         return Origin_List
         #    这个地方用了表达式，因为一开始使用的嵌套的 for 循环让我迷失了。
 
@@ -32,7 +33,5 @@ creat_list = MakeRandomList()
 
 for s in range(numbers_matrix):
     i = creat_list.creating(Dimentions_rows, Dimentions_columns, random_scale)
-    print('No.',s+1,'Matrix is:\n', np.array(i))
+    print('No.', s+1, 'Matrix is:\n', np.array(i))
     print('*******')
-
-
