@@ -7,33 +7,39 @@
 """
 import random
 
-balls = ['{}'.format(random.randint(0, 3)) for i in range(1, 1000)] # create a random balls set
-balls_new = []
-white_ball_numbers = 0
-black_ball_numbers = 0
-for i in balls:
-    if i == '0':  # 按照 0 和 1 的不同，替换成黑与白
-        i = 'white'
-        white_ball_numbers += 1
-    else:
-        i = 'black'
-        black_ball_numbers += 1
-    balls_new.append(i)
+def rendering_original_balls_set(ball_numbers = 1000):
+    balls = ['{}'.format(random.randint(0, 3)) for i in range(1, ball_numbers)] # create a random balls set
+    balls_new = []
+    white_ball_numbers = 0
+    black_ball_numbers = 0
+    for i in balls:
+        if i == '0':  # 按照 0 和 1 的不同，替换成黑与白
+            i = 'white'
+            white_ball_numbers += 1
+        else:
+            i = 'black'
+            black_ball_numbers += 1
+        balls_new.append(i)
 
-print(balls_new)
-print('black ball numbers is ', black_ball_numbers)
-print('white_ball_numbers is ', white_ball_numbers)
-print('Original probability of white balls in all is ',
-      white_ball_numbers/len(balls_new))
-print('.....................')
+    print(balls_new)
+    print('black ball numbers is ', black_ball_numbers)
+    print('white_ball_numbers is ', white_ball_numbers)
+    print('Original probability of white balls in all is ',
+        white_ball_numbers/len(balls_new))
+    print('.....................')
+
+    return balls_new
+
 
 pick_value_white = 0
 pick_times = 0
 stop_pick = True
 
+
+
 while stop_pick:
     pick_times += 1
-    pick_value = random.choice(balls_new)   # 每次在新的球的序列中提取一个小球
+    pick_value = random.choice(rendering_original_balls_set(ball_numbers = 1000))   # 每次在新的球的序列中提取一个小球
     # print(pick_value)
     if pick_value == 'white': # 如果是白球，记录一次白球的个数
         pick_value_white += 1
