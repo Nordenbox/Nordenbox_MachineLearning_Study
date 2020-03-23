@@ -30,12 +30,9 @@ class MakeRandomList:
 
 # print(Origin_List)
 creat_list = MakeRandomList()
-final_list = []
+
 for s in range(numbers_matrix):
     i = creat_list.creating(Dimentions_rows, Dimentions_columns, random_scale)
     print('No.', s+1, 'Matrix is:\n', np.array(i))
-    final_list.append(np.array(i))
-
     print('*******')
-
-print(final_list)
+    print(np.array(i))
