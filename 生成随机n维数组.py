@@ -2,17 +2,12 @@ import numpy as np
 import random
 
 
-Dimentions_rows = int(input('how many rows/matrix do you want: '))
-Dimentions_columns = int(input('how many columns/matrix do you want: '))
-random_scale = int(input('how large the random numbers: '))
-numbers_matrix = int(input('how many matrix do you want: '))
-
-
 class MakeRandomList:
     def __init__(self):
-        self.Dimentions_rows = Dimentions_rows
-        self.Dimentions_columns = Dimentions_columns
-        self.random_scale = random_scale
+        self.Dimentions_rows = int(input('how many rows/matrix do you want: '))
+        self.Dimentions_columns = int(input('how many columns/matrix do you want: '))
+        self.random_scale = int(input('how large the random numbers: '))
+        self.numbers_matrix = int(input('how many matrix do you want: '))
 
     def creating(self, Dimentions_rows, Dimentions_columns, random_scale):
         Origin_List = []
@@ -31,7 +26,7 @@ class MakeRandomList:
 # print(Origin_List)
 creat_list = MakeRandomList()
 
-for s in range(numbers_matrix):
-    i = creat_list.creating(Dimentions_rows, Dimentions_columns, random_scale)
-    print('No.', s+1, 'Matrix is:\n', np.array(i))
+for s in range(creat_list.numbers_matrix):
+    i = creat_list.creating(creat_list.Dimentions_rows, creat_list.Dimentions_columns, creat_list.random_scale)
+    print('No.', s + 1, 'Matrix is:\n', np.array(i))
     print('*******')

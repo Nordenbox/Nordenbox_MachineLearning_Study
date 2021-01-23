@@ -1,7 +1,14 @@
+import matplotlib.pyplot as plt
+from keras.datasets import mnist
 
-number = [int(x) for x in range(1000)]
-#print(number)
-game_number = input('game number is ')
-for i in number:
-    if i % game_number == 0 or i % 10 == game_number:
-        print(i)
+(train_images, train_labels), (test_images, test_labels)= mnist.load_data()
+print(train_images.ndim)
+print(train_labels.ndim)
+print(train_images.shape)
+print(train_images.dtype)
+
+
+my_slice = train_images[10,7:-7,7:-7]
+
+plt.imshow(my_slice,cmap= plt.cm.binary)
+plt.show()
