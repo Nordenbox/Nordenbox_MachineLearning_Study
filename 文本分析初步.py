@@ -76,7 +76,7 @@ from sklearn.model_selection import train_test_split
 
 # 划分数据集，将数据分为训练集和测试集。
 # 返回的数据被分成了四个部分：训练集特征，测试集特征，训练集标签，测试集标签
-result = train_test_split(X, y, train_size=0.8, random_state=1)
+#result = train_test_split(X, y, train_size=0.8, random_state=1)
 
 #以下代码可以替代对训练集索引。
 (train_feature,
@@ -105,7 +105,9 @@ from sklearn.neural_network import MLPClassifier
 # TODO 创建MLPClassifier对象，并存储在mlp变量中
 mlp = MLPClassifier()
 
-# TODO 使用fit()函数，通过train_feature和train_label，训练分类器
+# TODO 使用fit()方法，通过train_feature和train_label，训练分类器。
+# 训练集特征与训练集标签（人工）有一一对应的关系。让机器用算法确定一个数学模型。
+# mlp 变量调用了 MLPClassifier 类
 mlp.fit(train_feature, train_label)
 
 '''6. 评估模型准确率'''
@@ -113,10 +115,11 @@ mlp.fit(train_feature, train_label)
 # TODO 从sklearn.metrics中导入accuracy_score
 from sklearn.metrics import accuracy_score
 
-# TODO 对测试集数据进行预测
+# TODO 对测试集数据进行预测，换句话说就是要求输出对测试特征的标签结果。
+# mlp_pred 就是对 test_label 的假想对应结果。
 mlp_pred = mlp.predict(test_feature)
 
-# TODO 计算预测准确率，并将结果赋值给score
+# TODO 计算预测准确率，并将结果赋值给score。
 score = accuracy_score(mlp_pred,test_label)
 
 # TODO 输出准确率
@@ -136,7 +139,7 @@ comment =  [' '.join(comment)]
 try_feature = vect.transform(comment)
 # 使用toarray()函数把结果转换为NumPy数组
 try_feature = try_feature.toarray()
-# 使用predict()函数预测结果（前面 mlp 模型已经经过训练了，fit 函数）
+# 使用predict()函数预测结果（前面 mlp 模型已经经过训练了，fit 方法）
 try_pred = mlp.predict(try_feature)
 # 输出预测结果
 print(try_pred)

@@ -1,14 +1,4 @@
-import matplotlib.pyplot as plt
-from keras.datasets import mnist
+ret_data = {'error_code': 0, 'error_msg': 'SUCCESS', 'log_id': 9994897565050, 'timestamp': 1639269737, 'cached': 0, 'result': {'face_num': 1, 'face_list': [{'face_token': 'c30ea2234f7ecc19c2da086d7a643c31', 'location': {'left': 140.45, 'top': 188.01, 'width': 440, 'height': 430, 'rotation': 6}, 'face_probability': 1, 'angle': {'yaw': -48.34, 'pitch': 4.14, 'roll': 5.61}, 'glasses': {'type': 'sun', 'probability': 0.71}}]}}
+glasses = ret_data['result']['face_list'][0]['glasses']
 
-(train_images, train_labels), (test_images, test_labels)= mnist.load_data()
-print(train_images.ndim)
-print(train_labels.ndim)
-print(train_images.shape)
-print(train_images.dtype)
-
-
-my_slice = train_images[10,7:-7,7:-7]
-
-plt.imshow(my_slice,cmap= plt.cm.binary)
-plt.show()
+print(glasses)
