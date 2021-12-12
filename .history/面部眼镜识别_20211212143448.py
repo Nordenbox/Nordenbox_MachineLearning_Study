@@ -1,3 +1,7 @@
+# 为了机构化显示复杂的数据
+import json
+import pprint
+
 # 导入AipFace类
 from aip import AipFace
 
@@ -14,7 +18,7 @@ client = AipFace(APP_ID, API_KEY, SECRET_KEY)
 import base64
 
 # 图片的路径
-img_path = "kimura.jpg"
+img_path = "/Users/nordenbox/Pictures/kimuraCollections.jpg"
 
 # 以rb的方式读取图片
 with open(img_path, "rb") as file:
@@ -25,16 +29,30 @@ with open(img_path, "rb") as file:
     # 图片转换为字符串
     img = str(img, 'utf-8')
 # TODO 可选参数options，添加要识别的面部属性：glasses
-options = {'face_field':'glasses'}
+options = {'max_face_num': 10,'face_field':'age,quality'}
 
 # TODO 设定图片类型为base64类型
 img_type = 'BASE64'
 
 # TODO 带参数调用人脸检测
 ret_data = client.detect(img,img_type,options)
+# 用结构化的表现方式打印出数据结果，看起来一目了然。
+pprint.pprint(ret_data)
+#print(json.dumps(ret_data,indent=4,sort_keys=True))
+
+# 显示每一个人的年龄
+ageList = []
+for i in ret_data['result']['face_list']:
+    res = i['age']
+    ageList.append(res)
+print(f'每一个人的年纪分别是{ageList}岁')
 
 # TODO 使用if语句判断检测是否成功：错误信息是否为SUCCESS
 if ret_data['error_msg'] == 'SUCCESS':
+    
+    # 人脸的数目
+    face_num = int(ret_data['result']['face_num'])
+    
     
     # TODO 若检测成功，将眼镜信息赋值给变量glasses
     glasses = ret_data['result']['face_list'][0]['glasses']
@@ -42,6 +60,8 @@ if ret_data['error_msg'] == 'SUCCESS':
     glasses_type = glasses['type']
     # TODO 将眼镜信息中的probability数据值，赋值给变量glasses_pro
     glasses_pro = glasses['probability']
+    
+    print(f'There are {face_num} people.') # 显示人数
     
     # TODO 使用if语句判断，如果glasses_type的值为"sun"
     if glasses_type == 'sun':

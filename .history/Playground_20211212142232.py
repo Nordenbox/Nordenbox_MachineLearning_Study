@@ -155,7 +155,7 @@ ret_data = {'cached': 0,
                                                      'right_eye': 0.2}}}],
             'face_num': 7},
  'timestamp': 1639283195}
-ageList = []
+ ageList = []
 for i in ret_data['result']['face_list']:
     res = i['age']
     ageList.append(res)

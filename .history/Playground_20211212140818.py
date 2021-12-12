@@ -1,4 +1,3 @@
-import pprint 
 ret_data = {'cached': 0,
  'error_code': 0,
  'error_msg': 'SUCCESS',
@@ -155,8 +154,6 @@ ret_data = {'cached': 0,
                                                      'right_eye': 0.2}}}],
             'face_num': 7},
  'timestamp': 1639283195}
-ageList = []
-for i in ret_data['result']['face_list']:
-    res = i['age']
-    ageList.append(res)
-print(f'每一个人的年纪分别是{ageList}岁')
+
+for i in ret_data['result']['face_list'][0]:
+    print(i)
