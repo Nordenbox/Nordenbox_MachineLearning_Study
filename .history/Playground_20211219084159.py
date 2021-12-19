@@ -27,10 +27,7 @@ min_silence_len = 500
 silence_thresh = -50
 pieces = split_on_silence(sound,min_silence_len,silence_thresh)
 
-# 输出pieces查看结果. 对列表的audio_segement.AudioSeagment 对象似乎不能直接用 from_wav 方法
-# 要用 export 方法。
+# 输出pieces查看结果
 print(pieces)
-count = 0
 for i in pieces:
-    i.export('/Users/nordenbox/Movies/'+str(count)+'.wav',format='wav')
-    count += 1
+    print(i)
