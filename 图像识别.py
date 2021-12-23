@@ -4,9 +4,9 @@ import base64
 import os
 # 将存储照片的文件夹路径'img'赋值给变量imgroot
 imgroot = 'img' 
-# 使用os.listdir()函数获取该路径下所有的照片，并赋值给变量imglist
+# 使用os.listdir()函数获取该路径下所有的照片的名字，并赋值给变量imglist
 imglist = os.listdir(imgroot)
-
+# 注意，这里拿到的不是路径！！！！！
 
 # 从aip中导入AipImageClassify
 from aip import AipImageClassify

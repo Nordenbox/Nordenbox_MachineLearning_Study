@@ -1,36 +1,69 @@
-# 使用from...import从moviepy.editor导入VideoFileClip
-from moviepy.editor import VideoFileClip
+'''读取图片'''
+filePath = 'zuoye.jpg' 
+# TODO 使用with...as以rb方式，打开路径为filePath的图片并赋值给f
+with open(filePath,'rb') as f:
 
-# 使用VideoFileClip()加载视频文件
-video = VideoFileClip("/Users/nordenbox/Movies/IMG_9354.mov")
-# 使用VideoFileClip类中的audio方法获取加载后视频文件的音频
-audio = video.audio
+    # TODO 使用read()读取f，赋值给变量image
+    image = f.read()
+    
+import pprint   
+'''调用通用文字识别接口'''
+# 从aip中导入AipOcr
+from aip import AipOcr
+# 你的 APPID AK SK
+APP_ID = '25341900'
 
-# 使用write_audiofile()函数将音频文件写入
-audio.write_audiofile("/Users/nordenbox/Movies/IMG_9354.wav")
+API_KEY = 'ToGQ5jzESTEtRCBWaCGd4IPZ'
 
-# 使用from...import从pydub导入AudioSegment
-from pydub import AudioSegment
+SECRET_KEY = '7PYRyKzrOkmg1ckq1yB6ByBTy7DaaHOV'
+# TODO 新建一个AipOcr，并赋值给变量client
+client = AipOcr(APP_ID,API_KEY,SECRET_KEY)
 
-# 使用AudioSegment类中的from_wav()函数读取音频文件
-sound = AudioSegment.from_wav("/Users/nordenbox/Movies/IMG_9354.wav")
-# 使用set_frame_rate()函数设置采样率为16000
-sound = sound.set_frame_rate(16000)
-# 使用set_channels()函数设置声道数为1，即单声道
-sound = sound.set_channels(1)
 
-# 使用from...import从pydub.silence导入split_on_silence
-from pydub.silence import split_on_silence
+# TODO 创建字典options，并将可选参数detect_direction的值设置"true"
+options = {'detect_direction':'true'}
 
-# 使用split_on_silence()切分音频，并传入参数sound,min_silence_len = 500,silence_thresh = -50
-min_silence_len = 500
-silence_thresh = -50
-pieces = split_on_silence(sound,min_silence_len,silence_thresh)
+# TODO 调用通用文字识别接口并把结果赋值给result
+result = client.basicAccurate(image,options)
+#pprint(result)
 
-# 输出pieces查看结果. 对列表的audio_segement.AudioSeagment 对象似乎不能直接用 from_wav 方法
-# 要用 export 方法。
-print(pieces)
-count = 0
-for i in pieces:
-    i.export('/Users/nordenbox/Movies/'+str(count)+'.wav',format='wav')
-    count += 1
+'''处理文字识别后的结果'''
+# TODO 创建一个空字符串text
+text = ''
+
+# TODO 使用for循环遍历识别后的文本内容
+for i in result['words_result']:
+    
+
+    # TODO 将内容添加到text中
+    text=text.join(i['words'])
+    
+
+'''调用文本纠错识别'''
+# TODO 从aip中导入AipNlp
+from aip import AipNlp
+
+# 你的 APPID AK SK
+APP_ID = '25341900'
+
+API_KEY = 'ToGQ5jzESTEtRCBWaCGd4IPZ'
+
+SECRET_KEY = '7PYRyKzrOkmg1ckq1yB6ByBTy7DaaHOV'
+# TODO 新建一个AipNlp，并赋值给变量client2
+client2 = AipNlp(APP_ID,API_KEY,SECRET_KEY)
+
+# TODO 调用ecnet()函数，并将结果赋给true_result
+true_result = client2.ecnet(text)
+print(true_result)
+
+
+'''输出结果'''
+# TODO 记录作文中有几个错别字
+incorrect_num = len(true_result['item']['vec_gragment'])
+# 键值是一个列表，列表里只有一个元素，而元素又是一个字典。那['vec_fragment']的键值就是列表中中元素个数，也就是错误处。
+
+# TODO 格式化输出"一共有x处错别字"
+print(f'一共有{incorrect_num}处错别字')
+
+# TODO 输出修改后的文本
+print(true_result['text'])

@@ -1,60 +1,110 @@
-# 导入AipFace类
-from aip import AipFace
 
-# 将AppID'10252021'赋值给变量APP_ID
+import os
+import shutil
+from aip import AipFace
+import json
+import pprint
+import math
+
+#图片分类
+
+from aip import AipImageClassify
+
+APP_ID = '25318522'
+API_KEY = 'w07MZbos3TN8IiN7FZWNBDDO'
+SECRET_KEY = '4M9YrNcuHc6yLdgU2svq282C5EOX0RlO'
+# 新建一个AipImageClassify，并赋值给变量client
+client = AipImageClassify(APP_ID, API_KEY, SECRET_KEY)
+
+imgroot = '/Users/nordenbox/Documents/GitHub/NordenboxPython/Nordenbox_MachineLearning_Study/yequ/photo'
+imglist = os.listdir(imgroot)
+
+# 拿到图片文件夹内部所有图片的路径（不是文件名）
+for image_name in imglist:
+    if image_name[0] == '.' or '.' not in image_name:
+        continue
+
+    filePath = imgroot + '/' + image_name
+
+    with open(filePath, 'rb') as f:
+        each_image = f.read()
+
+    classifyResult = client.advancedGeneral(each_image)
+
+    if 'result' in classifyResult:
+        value = classifyResult['result'][0].get('root', '未分类')
+        image_label = value.split('-')[0]
+        folderPath = imgroot + '/' + image_label
+
+        if not os.path.exists(folderPath):
+            os.mkdir(folderPath)
+
+        finalPath = shutil.move(filePath, folderPath)
+        print(f'已经移动到：{finalPath}')
+
+# 人脸识别和口罩检测
+
+import base64
+from aip import AipFace
 APP_ID = '25328314'
-# 将API Key'ZHe7788sh11GEjIAdEKeY'赋值给变量API_KEY
+
 API_KEY = 'p3hhOSswrMBtYEgtpYSaQphg'
-# 将Secret Key'JMMzHe7788BUSH1ZhEnM1YUEhh'赋值给变量SECRET_KEY
+
 SECRET_KEY = 'E1raRRhSREebVALnUVi43apuhH0RmEnk'
 # 将密钥信息传递给AipFace生成客户端，并将结果存储在client中
 client = AipFace(APP_ID, API_KEY, SECRET_KEY)
 
-# 导入base64模块
-import base64
-
-# 图片的路径
-img_path = "kimura.jpg"
-
-# 以rb的方式读取图片
-with open(img_path, "rb") as file:
-    # 读取图片内容
-    res = file.read()
-    # 图片文件进行base64编码
-    img = base64.b64encode(res)
-    # 图片转换为字符串
-    img = str(img, 'utf-8')
-# TODO 可选参数options，添加要识别的面部属性：glasses
-options = {'face_field':'glasses'}
-
-# TODO 设定图片类型为base64类型
-img_type = 'BASE64'
-
-# TODO 带参数调用人脸检测
-ret_data = client.detect(img,img_type,options)
-
-# TODO 使用if语句判断检测是否成功：错误信息是否为SUCCESS
-if 'error_msg' == 'SUCCESS':
+mask_human_path = '/Users/nordenbox/Documents/GitHub/NordenboxPython/Nordenbox_MachineLearning_Study/yequ/photo/人物'
+mask_human_image = os.listdir(mask_human_path)
+for i in mask_human_image:
+    mask_human_image_path = mask_human_path +'/' + i
     
-    # TODO 若检测成功，将眼镜信息赋值给变量glasses
-    glasses = ret_data['result']['face_list'][0]['glasses']
-    # TODO 将眼镜信息中的type数据值，赋值给变量glasses_type
-    glasses_type = glasses['type']
-    # TODO 将眼镜信息中的probability数据值，赋值给变量glasses_pro
-    glasses_pro = glasses['probability']
+    with open(mask_human_image_path, 'rb') as f:
+        res = f.read()
+        img = base64.b64encode(res)
+        img = str(img,'utf-8')
     
-    # TODO 使用if语句判断，如果glasses_type的值为"sun"
-    if glasses_type == 'sun':
-        # TODO 格式化输出眼镜类型为墨镜
-        print('眼镜类型为墨镜')
-    # TODO 如果glasses_type的值为"common"
-    elif glasses_type == 'common':
-        # 格式化输出眼镜类型为普通眼镜
-        print(f"图片中的人有{glasses_pro}的可能戴了普通眼镜")
-    # TODO 如果glasses_type的值为"none"
-    elif glasses_type == 'none':
-        # 格式化输出没有眼镜
-        print(f"图片中的人有{glasses_pro}的可能没有戴眼镜")
-# 否则输出检测失败
-else:
-    print('检测失败！')
+    options = {'max_face_num': 10,'face_field':'quality,mask'}
+    img_type = 'BASE64'
+    
+    face_data = client.detect(img,img_type,options)
+    
+    from PIL import Image
+    
+    with Image.open(mask_human_image_path) as f:
+        img_copy = f.copy()
+        
+    from PIL import ImageDraw
+    
+    draw_image = ImageDraw.Draw(img_copy)
+    
+    from PIL import ImageFont
+    
+    if face_data['error_msg']=='SUCCESS':
+        for face_msg in face_data['result']['face_list']:
+            location = face_msg['location']
+            x1 = location['left']
+            y1 = location['top']
+            x2 = x1 + location['width']
+            y2 = y1 + location['height']
+            
+            font_path = '/Users/nordenbox/Documents/GitHub/NordenboxPython/Nordenbox_MachineLearning_Study/yequ/STHeiti-Medium-4.ttc'
+            font_size = location['width']//5
+            font = ImageFont.truetype(font_path, font_size)
+            
+            if face_msg['mask']['type']== 1:
+                color = 'lightgreen'
+                text = '已佩戴口罩'
+            elif face_msg['mask']['type'] == 0:
+                color = 'red'
+                text = '未佩戴口罩'
+            
+            draw_image.rectangle([x1, y1, x2, y2],outline=color,width=2)
+            draw_image.rectangle([x1, y2, x2, y2+ font_size*2],fill=color)
+            draw_image.text([x1, y2],text,'white',font)
+        
+        img_copy.save('/Users/nordenbox/Documents/GitHub/NordenboxPython/Nordenbox_MachineLearning_Study/yequ/photo/口罩/'+i)
+    else:
+        print('fault')   
+                
+        
